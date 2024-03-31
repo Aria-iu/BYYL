@@ -1,7 +1,8 @@
-cc?= gcc
-file?= test1
+cc?=gcc
+file?=test1
 flex?=/home/zyc/rust_projects/BYYL/flex-2.6.4-build/bin/flex
 bison?=/home/zyc/rust_projects/BYYL/bison-3.7.91-build/bin/bison
+num?=1
 
 run: 
 	$(flex) --outfile=./src/lex.c ./src/lexical.l
@@ -30,8 +31,8 @@ rerun:
 	$(flex) --outfile=./src/lex.c ./src/lexical.l
 	$(cc) ./src/main.c ./src/tree/node.c ./syntax.tab.c -lfl -o parser
 
-mytest:
-	cd work1_script/ && cargo run --bin test1 && cd ..
+my_test:
+	./parser ./test/test$(num).cmm
 
 
 clean:
