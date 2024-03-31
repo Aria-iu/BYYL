@@ -24,8 +24,8 @@ bison-3.7.91
 cd homework1
 make build
 make rerun
-make test num=1
-make test num=2
+make my_test num=1
+make my_test num=2
 ...
 
 ```

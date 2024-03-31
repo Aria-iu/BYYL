@@ -1,7 +1,7 @@
 cc?=gcc
 file?=test1
-flex?=/home/zyc/rust_projects/BYYL/flex-2.6.4-build/bin/flex
-bison?=/home/zyc/rust_projects/BYYL/bison-3.7.91-build/bin/bison
+flex?=../flex-2.6.4-build/bin/flex
+bison?=../bison-3.7.91-build/bin/bison
 num?=1
 
 run: 
