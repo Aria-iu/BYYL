@@ -55,6 +55,10 @@ BLOCKCOMMENTSIGNEND "*/"
 LINECOMMENT {COMMENT}{WS}*{STRING}*\n
 BLOCKCOMMENT {BLOCKCOMMENTSIGNBEGIN}{WS}*{STRING2}*{BLOCKCOMMENTSIGNEND}
 NESTBLOCKCOMMENT {BLOCKCOMMENTSIGNBEGIN}{WS}*{STRING2}*{BLOCKCOMMENT}{WS}*{STRING2}*{BLOCKCOMMENTSIGNEND}
+JINGHAO "#"
+INCLUDE include
+INCFILE "<"{ID}".h>"
+
 %%
 {WS}+ {;}
 \r {;}
@@ -62,6 +66,9 @@ NESTBLOCKCOMMENT {BLOCKCOMMENTSIGNBEGIN}{WS}*{STRING2}*{BLOCKCOMMENT}{WS}*{STRIN
 {LINECOMMENT} {;}
 {NESTBLOCKCOMMENT} {;}
 {BLOCKCOMMENT} {;}
+{JINGHAO} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"#",yytext);return JINGHAO;}
+{INCLUDE} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"INCLUDE",yytext);return INCLUDE;}
+{INCFILE} {yylval.pnode=new_token_node(yylineno,INC_FILE,"INC_FILE",yytext);return INCFILE;}
 {WHILE} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"WHILE",yytext);return WHILE;}
 {IF} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"IF",yytext);return IF;}
 {ELSE} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"ELSE",yytext);return ELSE;}

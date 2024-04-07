@@ -1,7 +1,7 @@
 cc?=gcc
 file?=test1
-flex?=../flex-2.6.4-build/bin/flex
-bison?=../bison-3.7.91-build/bin/bison
+flex?=flex
+bison?=bison
 num?=1
 
 run: 
@@ -33,6 +33,9 @@ rerun:
 
 my_test:
 	./parser ./test/test$(num).cmm
+
+an_test:
+	./parser ./test_an/testcase_$(num)
 
 
 clean:

@@ -41,6 +41,9 @@
 %token <pnode> WHILE
 %token <pnode> OCTAL
 %token <pnode> HEXNUM
+%token <pnode> JINGHAO
+%token <pnode> INCLUDE
+%token <pnode> INCFILE
 
 
 %type <pnode> Program
@@ -64,6 +67,7 @@
 %type <pnode> DecList
 %type <pnode> Dec
 %type <pnode> Args
+%type <pnode> INCEXPR
 
 
 %right ASSIGN
@@ -84,7 +88,10 @@
 Program: ExtDefList                 {$$=new_node(@$.first_line,NOTTOKEN,"Program",1,$1);root=$$;}
     ;
 ExtDefList: ExtDef ExtDefList       {$$=new_node(@$.first_line,NOTTOKEN,"ExtDefList",2,$1,$2);}
+    | INCEXPR ExtDef ExtDefList     {$$=new_node(@$.first_line,NOTTOKEN,"ExtDefList",3,$1,$2,$3);}
     |                               {$$=NULL;}
+    ;
+INCEXPR: JINGHAO INCLUDE INCFILE    {$$=new_node(@$.first_line,NOTTOKEN,"INCEXPR",3,$1,$2,$3);}
     ;
 ExtDef: Specifier ExtDecList SEMI   {$$=new_node(@$.first_line,NOTTOKEN,"ExtDef",3,$1,$2,$3);}
     | Specifier SEMI                {$$=new_node(@$.first_line,NOTTOKEN,"ExtDef",2,$1,$2);}

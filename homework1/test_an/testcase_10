@@ -1,0 +1,7 @@
+int main()
+{
+	int a = 0123;
+	int b = 123;
+	int c = 0765;
+	int d = 765;
+}

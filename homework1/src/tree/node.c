@@ -78,6 +78,8 @@ void printTree(node_ptr node,int deepth){
         printf(": %s",node->val);
     }else if(node->type==FLOAT_TOKEN){
         printf(": %1f",atof(node->val));
+    }else if(node->type==INC_FILE){
+        printf(": %s",node->val);
     }
     printf("\n");
     printTree(node->child,deepth+1);

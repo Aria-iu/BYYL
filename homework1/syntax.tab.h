@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 3.7.91.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
@@ -83,7 +83,10 @@ extern int yydebug;
     WHILE = 284,                   /* WHILE  */
     OCTAL = 285,                   /* OCTAL  */
     HEXNUM = 286,                  /* HEXNUM  */
-    LOWER_THAN_ELSE = 287          /* LOWER_THAN_ELSE  */
+    JINGHAO = 287,                 /* JINGHAO  */
+    INCLUDE = 288,                 /* INCLUDE  */
+    INCFILE = 289,                 /* INCFILE  */
+    LOWER_THAN_ELSE = 290          /* LOWER_THAN_ELSE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -96,7 +99,7 @@ union YYSTYPE
 
     struct node* pnode;
 
-#line 100 "syntax.tab.h"
+#line 103 "syntax.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
