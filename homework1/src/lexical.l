@@ -30,6 +30,7 @@ PLUS "+"
 MINUS "-"
 STAR "*"
 DIV "/"
+PERCENT "%"
 AND "&&"
 OR "||"
 DOT "."
@@ -89,6 +90,7 @@ INCFILE "<"{ID}".h>"
 {STAR} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"STAR",yytext);return STAR;}
 {MINUS} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"MINUS",yytext);return MINUS;}
 {PLUS} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"PLUS",yytext);return PLUS;}
+{PERCENT} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"PERCENT",yytext);return PERCENT;}
 {RELOP} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"RELOP",yytext);return RELOP;}
 {ASSIGN} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"ASSIGNOP",yytext);return ASSIGN;}
 {COMMA} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"COMMA",yytext);return COMMA;}
