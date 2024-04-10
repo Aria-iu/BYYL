@@ -129,7 +129,7 @@ Tag: ID                             {$$=new_node(@$.first_line,NOTTOKEN,"Tag",1,
 VarDec: ID                          {$$=new_node(@$.first_line,NOTTOKEN,"VarDec",1,$1);}
     | VarDec LB INT RB              {$$=new_node(@$.first_line,NOTTOKEN,"VarDec",4,$1,$2,$3,$4);}
     | VarDec LB Exp RB              {$$=new_node(@$.first_line,NOTTOKEN,"VarDec",4,$1,$2,$3,$4);}
-    | error RB                      {SynError=1;fprintf(stderr,"Error type B at line %d: Missing \"]\".\n", yylineno);}
+    | error INT                     {SynError=1;fprintf(stderr,"Error type B at line %d: Missing \"]\".\n", yylineno);}
     ;
 FunDec: ID LP VarList RP            {$$=new_node(@$.first_line,NOTTOKEN,"FunDec",4,$1,$2,$3,$4);}
     | ID LP RP                      {$$=new_node(@$.first_line,NOTTOKEN,"FunDec",3,$1,$2,$3);}
@@ -147,11 +147,12 @@ StmtList: Stmt StmtList             {$$=new_node(@$.first_line,NOTTOKEN,"StmtLis
     |                               {$$=NULL;}
     ;
 Stmt: Exp SEMI                      {$$=new_node(@$.first_line,NOTTOKEN,"Stmt",2,$1,$2);}
+    | Exp                           {SynError=1;fprintf(stderr,"Error type B at line %d: Missing \";\"\n", yylineno);}
     | CompSt                        {$$=new_node(@$.first_line,NOTTOKEN,"Stmt",1,$1);}
     | RETURN Exp SEMI               {$$=new_node(@$.first_line,NOTTOKEN,"Stmt",3,$1,$2,$3);}
-    | IF LP Exp RP Exp ELSE Stmt    {SynError=1;fprintf(stderr,"Error type B at line %d: Missing \";\"\n", yylineno);}
     | IF LP Exp RP Stmt             {$$=new_node(@$.first_line,NOTTOKEN,"Stmt",5,$1,$2,$3,$4,$5);}
     | IF LP Exp RP Stmt ELSE Stmt   {$$=new_node(@$.first_line,NOTTOKEN,"Stmt",7,$1,$2,$3,$4,$5,$6,$7);}
+    | error SEMI                    {SynError=1;fprintf(stderr,"Error type B at line %d: Missing \";\"\n", yylineno);}
     | WHILE LP Exp RP Stmt          {$$=new_node(@$.first_line,NOTTOKEN,"Stmt",5,$1,$2,$3,$4,$5);}
     ;
 
