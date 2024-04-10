@@ -30,6 +30,10 @@ PLUS "+"
 MINUS "-"
 STAR "*"
 DIV "/"
+MIUASIGN "-="
+INCADD "++"
+POINTER "->"
+STRUCTDOTOP "."
 PERCENT "%"
 AND "&&"
 OR "||"
@@ -90,6 +94,10 @@ INCFILE "<"{ID}".h>"
 {STAR} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"STAR",yytext);return STAR;}
 {MINUS} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"MINUS",yytext);return MINUS;}
 {PLUS} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"PLUS",yytext);return PLUS;}
+{MIUASIGN} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"MIUASIGN",yytext);return MIUASIGN;}
+{INCADD}   {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"INCADD",yytext);return INCADD;}
+{POINTER}  {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"POINTER",yytext);return POINTER;}
+{STRUCTDOTOP}      {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"STRUCTDOTOP",yytext);return DOT;}
 {PERCENT} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"PERCENT",yytext);return PERCENT;}
 {RELOP} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"RELOP",yytext);return RELOP;}
 {ASSIGN} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"ASSIGNOP",yytext);return ASSIGN;}

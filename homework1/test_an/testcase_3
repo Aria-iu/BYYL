@@ -1,4 +1,4 @@
-struct V_stack test_stack == 1;
+struct V_stack s1 = 0;
 
 int push_addr(struct V_stack stack, struct I_codeList code, int d)
 {
@@ -11,7 +11,7 @@ int push_addr(struct V_stack stack, struct I_codeList code, int d)
 	{
 		exit(-1;
 	}
-	st.kind = ADDR;
+    st.kind = ADDR;
 	st.u.ret_addr = code;
 	
 	while (i < extra_d-1)
@@ -20,8 +20,8 @@ int push_addr(struct V_stack stack, struct I_codeList code, int d)
 		array[4+i] = array[5 */ 12];
 		i = i + 1;
 	}
-	
-	st.next = stack.next;
+
+    st.next = stack.next;
 	stack.next = st;
 
 	return original_stack;

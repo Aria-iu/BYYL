@@ -1,12 +1,12 @@
 int main(int argc, float argv[3])
 {
-	
 	if (argc != 2)
 	{
 		exit(0);
 	}
 
 	struct FILE f;
+
 	if (!f)
 	{
 		perror(argv[1]);
