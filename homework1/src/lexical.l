@@ -15,8 +15,8 @@
 LETTER [_a-zA-Z]
 Id [0-9_a-zA-Z]
 ID {LETTER}{Id}*
-IdNew [0-9_a-zA-Z ]
-IdNew2 [0-9_a-zA-Z \n\r]
+IdNew [0-9_a-zA-Z ;=+]
+IdNew2 [0-9_a-zA-Z \n\r\t\[\];),}\-{=\*(\<\+]
 STRING {IdNew}*
 STRING2 {IdNew2}*
 INT 0|[1-9]+[0-9]*
@@ -59,6 +59,7 @@ BLOCKCOMMENTSIGNBEGIN "/*"
 BLOCKCOMMENTSIGNEND "*/"
 LINECOMMENT {COMMENT}{WS}*{STRING}*\n
 BLOCKCOMMENT {BLOCKCOMMENTSIGNBEGIN}{WS}*{STRING2}*{BLOCKCOMMENTSIGNEND}
+ERRORBLOCKCOMMENT {BLOCKCOMMENTSIGNBEGIN}{WS}*{STRING2}*
 NESTBLOCKCOMMENT {BLOCKCOMMENTSIGNBEGIN}{WS}*{STRING2}*{BLOCKCOMMENT}{WS}*{STRING2}*{BLOCKCOMMENTSIGNEND}
 JINGHAO "#"
 INCLUDE include
@@ -110,6 +111,7 @@ INCFILE "<"{ID}".h>"
 {ID} {yylval.pnode=new_token_node(yylineno,ID_TOKEN,"ID",yytext);return ID;}
 
 
+{ERRORBLOCKCOMMENT} {LexError=1;printf("Error type A at Line %d: BlockComment Missing */.\n", yylineno);}
 [1-9]+{ID}|0[^x|X]{ID} {LexError=1;printf("Error type A at Line %d: Illegal ID \'%s\'.\n", yylineno, yytext);}
 "."{DIGIT}+ {LexError=1;printf("Error type A at Line %d: Illegal floating point number \"%s\".\n", yylineno, yytext);}
 {DIGIT}+"." {LexError=1;printf("Error type A at Line %d: Illegal floating point number \"%s\".\n", yylineno, yytext);}
