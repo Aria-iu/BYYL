@@ -26,11 +26,17 @@ _**<font color="red"> 注：此实验完成书中10个测试用例，和另外�
 cd homework1
 make build
 make rerun
+#基本10个测试
 make my_test num=1
 make my_test num=2
 ...
-
+#14个附加测试
+make an_test num=1
+make an_test num=2
+...
 ```
 若使用Rust和Cargo：
 
 在homework1/work1_script/src/bin目录下有10个测试脚本，注释更加详细。
+
+附加测试为写脚本，使用命令行即可。
