@@ -19,6 +19,8 @@ bison-3.7.91
 当然，Rust脚本更加方便。
 
 ## lab1
+_**<font color="red"> 注：此实验完成书中10个测试用例，和另外附加的14个测试用例（/homework1/test_an）,附加测试用例没有标准答案，作者只是按照自己的想法来判断是否报错。</font>**_
+
 若不使用Rust和Cargo,执行下面命令即可：
 ```
 cd homework1
