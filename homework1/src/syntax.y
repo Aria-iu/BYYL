@@ -163,6 +163,7 @@ Stmt: Exp SEMI                      {$$=new_node(@$.first_line,NOTTOKEN,"Stmt",2
     | error SEMI                    {SynError=1;fprintf(stderr,"Error type B at line %d: Missing \";\"\n", yylineno);}
     | WHILE LP Exp RP Stmt          {$$=new_node(@$.first_line,NOTTOKEN,"Stmt",5,$1,$2,$3,$4,$5);}
     | WHILE LP Exp SEMI RP Stmt     {SynError=1;fprintf(stderr,"Error type B at line %d: redundant symbol \";\"\n", yylineno);}
+    | STAR DIV                      {SynError=1;fprintf(stderr,"Error type B at line %d: Syntax error\n", yylineno);}
     ;
 
 // Local Definations
@@ -218,5 +219,5 @@ Args: Exp COMMA Args                {$$=new_node(@$.first_line,NOTTOKEN,"Args",3
 %%
 // print the syntax type error
 yyerror(char* msg){
-    //  fprintf(stderr,"Error type B at line %d: %s.\n", yylineno, "default error");
+    // fprintf(stderr,"Error type B at line %d: %s.\n", yylineno, "syntax error");
 }
