@@ -15,8 +15,8 @@
 LETTER [_a-zA-Z]
 Id [0-9_a-zA-Z]
 ID {LETTER}{Id}*
-IdNew [0-9_a-zA-Z ]
-IdNew2 [0-9_a-zA-Z \n\r]
+IdNew [0-9_a-zA-Z ;=+]
+IdNew2 [0-9_a-zA-Z \n\r\t\[\];),}\-{=\*(\<\+]
 STRING {IdNew}*
 STRING2 {IdNew2}*
 INT 0|[1-9]+[0-9]*
@@ -30,6 +30,11 @@ PLUS "+"
 MINUS "-"
 STAR "*"
 DIV "/"
+MIUASIGN "-="
+INCADD "++"
+POINTER "->"
+STRUCTDOTOP "."
+PERCENT "%"
 AND "&&"
 OR "||"
 DOT "."
@@ -52,9 +57,14 @@ HEXNUM 0x[0|1|2|3|4|5|6|7|8|9|a|b|c|d|e|f|A|B|C|D|E|F]+|0X[0|1|2|3|4|5|6|7|8|9|a
 COMMENT "//"
 BLOCKCOMMENTSIGNBEGIN "/*"
 BLOCKCOMMENTSIGNEND "*/"
-LINECOMMENT {COMMENT}{WS}*{STRING}*\n
+LINECOMMENT {COMMENT}{WS}*{STRING2}*\n
 BLOCKCOMMENT {BLOCKCOMMENTSIGNBEGIN}{WS}*{STRING2}*{BLOCKCOMMENTSIGNEND}
+ERRORBLOCKCOMMENT {BLOCKCOMMENTSIGNBEGIN}{WS}*{STRING2}*
 NESTBLOCKCOMMENT {BLOCKCOMMENTSIGNBEGIN}{WS}*{STRING2}*{BLOCKCOMMENT}{WS}*{STRING2}*{BLOCKCOMMENTSIGNEND}
+JINGHAO "#"
+INCLUDE include
+INCFILE "<"{ID}".h>"
+
 %%
 {WS}+ {;}
 \r {;}
@@ -62,6 +72,9 @@ NESTBLOCKCOMMENT {BLOCKCOMMENTSIGNBEGIN}{WS}*{STRING2}*{BLOCKCOMMENT}{WS}*{STRIN
 {LINECOMMENT} {;}
 {NESTBLOCKCOMMENT} {;}
 {BLOCKCOMMENT} {;}
+{JINGHAO} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"#",yytext);return JINGHAO;}
+{INCLUDE} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"INCLUDE",yytext);return INCLUDE;}
+{INCFILE} {yylval.pnode=new_token_node(yylineno,INC_FILE,"INC_FILE",yytext);return INCFILE;}
 {WHILE} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"WHILE",yytext);return WHILE;}
 {IF} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"IF",yytext);return IF;}
 {ELSE} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"ELSE",yytext);return ELSE;}
@@ -82,6 +95,11 @@ NESTBLOCKCOMMENT {BLOCKCOMMENTSIGNBEGIN}{WS}*{STRING2}*{BLOCKCOMMENT}{WS}*{STRIN
 {STAR} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"STAR",yytext);return STAR;}
 {MINUS} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"MINUS",yytext);return MINUS;}
 {PLUS} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"PLUS",yytext);return PLUS;}
+{MIUASIGN} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"MIUASIGN",yytext);return MIUASIGN;}
+{INCADD}   {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"INCADD",yytext);return INCADD;}
+{POINTER}  {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"POINTER",yytext);return POINTER;}
+{STRUCTDOTOP}      {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"STRUCTDOTOP",yytext);return DOT;}
+{PERCENT} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"PERCENT",yytext);return PERCENT;}
 {RELOP} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"RELOP",yytext);return RELOP;}
 {ASSIGN} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"ASSIGNOP",yytext);return ASSIGN;}
 {COMMA} {yylval.pnode=new_token_node(yylineno,CAN_NO_VAL,"COMMA",yytext);return COMMA;}
@@ -93,6 +111,7 @@ NESTBLOCKCOMMENT {BLOCKCOMMENTSIGNBEGIN}{WS}*{STRING2}*{BLOCKCOMMENT}{WS}*{STRIN
 {ID} {yylval.pnode=new_token_node(yylineno,ID_TOKEN,"ID",yytext);return ID;}
 
 
+{ERRORBLOCKCOMMENT} {LexError=1;printf("Error type A at Line %d: BlockComment Missing */.\n", yylineno);}
 [1-9]+{ID}|0[^x|X]{ID} {LexError=1;printf("Error type A at Line %d: Illegal ID \'%s\'.\n", yylineno, yytext);}
 "."{DIGIT}+ {LexError=1;printf("Error type A at Line %d: Illegal floating point number \"%s\".\n", yylineno, yytext);}
 {DIGIT}+"." {LexError=1;printf("Error type A at Line %d: Illegal floating point number \"%s\".\n", yylineno, yytext);}

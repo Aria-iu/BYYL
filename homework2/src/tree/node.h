@@ -9,7 +9,8 @@ enum TYPE{
     ID_TOKEN,
     TYPE_TOKEN,
     CAN_NO_VAL,
-    NOTTOKEN
+    NOTTOKEN,
+    INC_FILE
 };
 
 struct node{

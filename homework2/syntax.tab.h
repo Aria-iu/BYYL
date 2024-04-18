@@ -1,4 +1,4 @@
-/* A Bison parser, made by GNU Bison 3.7.91.  */
+/* A Bison parser, made by GNU Bison 3.8.2.  */
 
 /* Bison interface for Yacc-like parsers in C
 
@@ -63,27 +63,35 @@ extern int yydebug;
     RELOP = 264,                   /* RELOP  */
     PLUS = 265,                    /* PLUS  */
     MINUS = 266,                   /* MINUS  */
-    STAR = 267,                    /* STAR  */
-    DIV = 268,                     /* DIV  */
-    AND = 269,                     /* AND  */
-    OR = 270,                      /* OR  */
-    NOT = 271,                     /* NOT  */
-    DOT = 272,                     /* DOT  */
-    TYPE = 273,                    /* TYPE  */
-    LP = 274,                      /* LP  */
-    RP = 275,                      /* RP  */
-    LB = 276,                      /* LB  */
-    RB = 277,                      /* RB  */
-    LC = 278,                      /* LC  */
-    RC = 279,                      /* RC  */
-    STRUCT = 280,                  /* STRUCT  */
-    RETURN = 281,                  /* RETURN  */
-    IF = 282,                      /* IF  */
-    ELSE = 283,                    /* ELSE  */
-    WHILE = 284,                   /* WHILE  */
-    OCTAL = 285,                   /* OCTAL  */
-    HEXNUM = 286,                  /* HEXNUM  */
-    LOWER_THAN_ELSE = 287          /* LOWER_THAN_ELSE  */
+    MIUASIGN = 267,                /* MIUASIGN  */
+    STAR = 268,                    /* STAR  */
+    DIV = 269,                     /* DIV  */
+    PERCENT = 270,                 /* PERCENT  */
+    AND = 271,                     /* AND  */
+    OR = 272,                      /* OR  */
+    NOT = 273,                     /* NOT  */
+    DOT = 274,                     /* DOT  */
+    TYPE = 275,                    /* TYPE  */
+    LP = 276,                      /* LP  */
+    RP = 277,                      /* RP  */
+    LB = 278,                      /* LB  */
+    RB = 279,                      /* RB  */
+    LC = 280,                      /* LC  */
+    RC = 281,                      /* RC  */
+    STRUCT = 282,                  /* STRUCT  */
+    RETURN = 283,                  /* RETURN  */
+    IF = 284,                      /* IF  */
+    ELSE = 285,                    /* ELSE  */
+    WHILE = 286,                   /* WHILE  */
+    OCTAL = 287,                   /* OCTAL  */
+    HEXNUM = 288,                  /* HEXNUM  */
+    JINGHAO = 289,                 /* JINGHAO  */
+    INCLUDE = 290,                 /* INCLUDE  */
+    INCFILE = 291,                 /* INCFILE  */
+    INCADD = 292,                  /* INCADD  */
+    POINTER = 293,                 /* POINTER  */
+    STRUCTDOTOP = 294,             /* STRUCTDOTOP  */
+    LOWER_THAN_ELSE = 295          /* LOWER_THAN_ELSE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -96,7 +104,7 @@ union YYSTYPE
 
     struct node* pnode;
 
-#line 100 "syntax.tab.h"
+#line 108 "syntax.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

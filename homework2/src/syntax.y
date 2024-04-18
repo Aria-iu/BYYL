@@ -21,8 +21,10 @@
 %token <pnode> RELOP
 %token <pnode> PLUS
 %token <pnode> MINUS
+%token <pnode> MIUASIGN
 %token <pnode> STAR
 %token <pnode> DIV
+%token <pnode> PERCENT
 %token <pnode> AND
 %token <pnode> OR
 %token <pnode> NOT
@@ -41,6 +43,12 @@
 %token <pnode> WHILE
 %token <pnode> OCTAL
 %token <pnode> HEXNUM
+%token <pnode> JINGHAO
+%token <pnode> INCLUDE
+%token <pnode> INCFILE
+%token <pnode> INCADD
+%token <pnode> POINTER
+%token <pnode> STRUCTDOTOP
 
 
 %type <pnode> Program
@@ -64,6 +72,9 @@
 %type <pnode> DecList
 %type <pnode> Dec
 %type <pnode> Args
+%type <pnode> INCEXPR
+%type <pnode> GLOBALINIT
+%type <pnode> FuncUse
 
 
 %right ASSIGN
@@ -84,6 +95,18 @@
 Program: ExtDefList                 {$$=new_node(@$.first_line,NOTTOKEN,"Program",1,$1);root=$$;}
     ;
 ExtDefList: ExtDef ExtDefList       {$$=new_node(@$.first_line,NOTTOKEN,"ExtDefList",2,$1,$2);}
+    | INCEXPR ExtDef ExtDefList     {$$=new_node(@$.first_line,NOTTOKEN,"ExtDefList",3,$1,$2,$3);}
+    | INCEXPR GLOBALINIT ExtDef ExtDefList {$$=new_node(@$.first_line,NOTTOKEN,"ExtDefList",4,$1,$2,$3,$4);}
+    | GLOBALINIT                    {$$=new_node(@$.first_line,NOTTOKEN,"ExtDefList",1,$1);}
+    | GLOBALINIT ExtDef ExtDefList  {$$=new_node(@$.first_line,NOTTOKEN,"ExtDefList",3,$1,$2,$3);}
+    |                               {$$=NULL;}
+    ;
+
+GLOBALINIT: Specifier Exp  SEMI     {$$=new_node(@$.first_line,NOTTOKEN,"GLOBALINIT",3,$1,$2,$3);}
+    |                               {$$=NULL;}
+    ; 
+
+INCEXPR: JINGHAO INCLUDE INCFILE    {$$=new_node(@$.first_line,NOTTOKEN,"INCEXPR",3,$1,$2,$3);}
     |                               {$$=NULL;}
     ;
 ExtDef: Specifier ExtDecList SEMI   {$$=new_node(@$.first_line,NOTTOKEN,"ExtDef",3,$1,$2,$3);}
@@ -110,30 +133,37 @@ Tag: ID                             {$$=new_node(@$.first_line,NOTTOKEN,"Tag",1,
 // Declarators
 VarDec: ID                          {$$=new_node(@$.first_line,NOTTOKEN,"VarDec",1,$1);}
     | VarDec LB INT RB              {$$=new_node(@$.first_line,NOTTOKEN,"VarDec",4,$1,$2,$3,$4);}
-    | error RB                      {SynError=1;fprintf(stderr,"Error type B at line %d: Missing \"]\".\n", yylineno);}
+    | VarDec LB Exp RB              {$$=new_node(@$.first_line,NOTTOKEN,"VarDec",4,$1,$2,$3,$4);}
+    | error INT                     {SynError=1;fprintf(stderr,"Error type B at line %d: Missing \"]\".\n", yylineno);}
     ;
 FunDec: ID LP VarList RP            {$$=new_node(@$.first_line,NOTTOKEN,"FunDec",4,$1,$2,$3,$4);}
     | ID LP RP                      {$$=new_node(@$.first_line,NOTTOKEN,"FunDec",3,$1,$2,$3);}
     ;
 VarList: ParamDec COMMA VarList     {$$=new_node(@$.first_line,NOTTOKEN,"VarList",3,$1,$2,$3);}
     | ParamDec                      {$$=new_node(@$.first_line,NOTTOKEN,"VarList",1,$1);}
+    |                               {$$=NULL;}
     ;
 ParamDec: Specifier VarDec          {$$=new_node(@$.first_line,NOTTOKEN,"ParamDec",2,$1,$2);}
     ;
 
 // Statements
 CompSt: LC DefList StmtList RC      {$$=new_node(@$.first_line,NOTTOKEN,"CompSt",4,$1,$2,$3,$4);}
+    | LC DefList StmtList           {SynError=1;fprintf(stderr,"Error type B at line %d: Missing \"}\".\n", yylineno);}
     ;
 StmtList: Stmt StmtList             {$$=new_node(@$.first_line,NOTTOKEN,"StmtList",2,$1,$2);}
+    | Stmt DefList StmtList         {$$=new_node(@$.first_line,NOTTOKEN,"StmtList",3,$1,$2,$3);}
     |                               {$$=NULL;}
     ;
 Stmt: Exp SEMI                      {$$=new_node(@$.first_line,NOTTOKEN,"Stmt",2,$1,$2);}
+    | Exp                           {SynError=1;fprintf(stderr,"Error type B at line %d: Missing \";\"\n", yylineno);}
     | CompSt                        {$$=new_node(@$.first_line,NOTTOKEN,"Stmt",1,$1);}
     | RETURN Exp SEMI               {$$=new_node(@$.first_line,NOTTOKEN,"Stmt",3,$1,$2,$3);}
-    | IF LP Exp RP Exp ELSE Stmt    {SynError=1;fprintf(stderr,"Error type B at line %d: Missing \";\"\n", yylineno);}
     | IF LP Exp RP Stmt             {$$=new_node(@$.first_line,NOTTOKEN,"Stmt",5,$1,$2,$3,$4,$5);}
     | IF LP Exp RP Stmt ELSE Stmt   {$$=new_node(@$.first_line,NOTTOKEN,"Stmt",7,$1,$2,$3,$4,$5,$6,$7);}
+    | error SEMI                    {SynError=1;fprintf(stderr,"Error type B at line %d: Missing \";\"\n", yylineno);}
     | WHILE LP Exp RP Stmt          {$$=new_node(@$.first_line,NOTTOKEN,"Stmt",5,$1,$2,$3,$4,$5);}
+    | WHILE LP Exp SEMI RP Stmt     {SynError=1;fprintf(stderr,"Error type B at line %d: redundant symbol \";\"\n", yylineno);}
+    | STAR DIV                      {SynError=1;fprintf(stderr,"Error type B at line %d: Syntax error\n", yylineno);}
     ;
 
 // Local Definations
@@ -158,11 +188,17 @@ Exp: Exp ASSIGN Exp                 {$$=new_node(@$.first_line,NOTTOKEN,"Exp",3,
     | Exp MINUS Exp                   {$$=new_node(@$.first_line,NOTTOKEN,"Exp",3,$1,$2,$3);}
     | Exp STAR Exp                   {$$=new_node(@$.first_line,NOTTOKEN,"Exp",3,$1,$2,$3);}
     | Exp DIV Exp                   {$$=new_node(@$.first_line,NOTTOKEN,"Exp",3,$1,$2,$3);}
+    | Exp PERCENT Exp               {$$=new_node(@$.first_line,NOTTOKEN,"Exp",3,$1,$2,$3);}
+    | Exp MIUASIGN Exp              {$$=new_node(@$.first_line,NOTTOKEN,"Exp",3,$1,$2,$3);}
+    | Exp POINTER Exp               {$$=new_node(@$.first_line,NOTTOKEN,"Exp",3,$1,$2,$3);}
+    | Exp STRUCTDOTOP Exp           {$$=new_node(@$.first_line,NOTTOKEN,"Exp",3,$1,$2,$3);}
     | LP Exp RP                   {$$=new_node(@$.first_line,NOTTOKEN,"Exp",3,$1,$2,$3);}
     | MINUS Exp                     {$$=new_node(@$.first_line,NOTTOKEN,"Exp",2,$1,$2);}
     | NOT Exp                       {$$=new_node(@$.first_line,NOTTOKEN,"Exp",2,$1,$2);}
+    | ID INCADD                     {$$=new_node(@$.first_line,NOTTOKEN,"Exp",2,$1,$2);}
     | ID LP Args RP                 {$$=new_node(@$.first_line,NOTTOKEN,"Exp",4,$1,$2,$3,$4);}
     | ID LP RP                      {$$=new_node(@$.first_line,NOTTOKEN,"Exp",3,$1,$2,$3);}
+    | ID LP Args SEMI               {SynError=1;fprintf(stderr,"Error type B at line %d: Missing \"\)\".\n", yylineno);}
     | Exp LB Exp RB                 {$$=new_node(@$.first_line,NOTTOKEN,"Exp",4,$1,$2,$3,$4);}
     | Exp DOT ID                    {$$=new_node(@$.first_line,NOTTOKEN,"Exp",3,$1,$2,$3);}
     | ID                            {$$=new_node(@$.first_line,NOTTOKEN,"Exp",1,$1);}
@@ -172,6 +208,12 @@ Exp: Exp ASSIGN Exp                 {$$=new_node(@$.first_line,NOTTOKEN,"Exp",3,
     | OCTAL                         {$$=new_node(@$.first_line,NOTTOKEN,"Exp",1,$1);}
     | HEXNUM                        {$$=new_node(@$.first_line,NOTTOKEN,"Exp",1,$1);}
     ;
+
+FuncUse: ID LP Args RP              {$$=new_node(@$.first_line,NOTTOKEN,"FuncUse",4,$1,$2,$3,$4);}
+    | ID LP RP                      {$$=new_node(@$.first_line,NOTTOKEN,"FuncUse",4,$1,$2,$3);}
+    | ID LP Args SEMI               {SynError=1;fprintf(stderr,"Error type B at line %d: Missing \"\)\".\n", yylineno);}
+    ;
+
 Args: Exp COMMA Args                {$$=new_node(@$.first_line,NOTTOKEN,"Args",3,$1,$2,$3);}
     | Exp                           {$$=new_node(@$.first_line,NOTTOKEN,"Args",1,$1);}
     ;
@@ -179,5 +221,5 @@ Args: Exp COMMA Args                {$$=new_node(@$.first_line,NOTTOKEN,"Args",3
 %%
 // print the syntax type error
 yyerror(char* msg){
-    //  fprintf(stderr,"Error type B at line %d: %s.\n", yylineno, msg);
+    // fprintf(stderr,"Error type B at line %d: %s.\n", yylineno, "syntax error");
 }

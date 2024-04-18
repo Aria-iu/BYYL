@@ -22,7 +22,6 @@ int main(int argc,char** argv){
     if(!LexError && !SynError){
         printTree(root,0);
     }
-    
     // free mem
     delete_node(root);
     return 0;
