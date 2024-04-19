@@ -202,7 +202,6 @@ Exp: Exp ASSIGN Exp                 {$$=new_node(@$.first_line,NOTTOKEN,"Exp",3,
     | Exp LB Exp RB                 {$$=new_node(@$.first_line,NOTTOKEN,"Exp",4,$1,$2,$3,$4);}
     | Exp DOT ID                    {$$=new_node(@$.first_line,NOTTOKEN,"Exp",3,$1,$2,$3);}
     | ID                            {$$=new_node(@$.first_line,NOTTOKEN,"Exp",1,$1);}
-    | VarDec                        {$$=new_node(@$.first_line,NOTTOKEN,"Exp",1,$1);}
     | INT                           {$$=new_node(@$.first_line,NOTTOKEN,"Exp",1,$1);}
     | FLOAT                         {$$=new_node(@$.first_line,NOTTOKEN,"Exp",1,$1);}
     | OCTAL                         {$$=new_node(@$.first_line,NOTTOKEN,"Exp",1,$1);}

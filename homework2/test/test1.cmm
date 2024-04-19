@@ -1,8 +1,4 @@
-int add(int a,int b){
-    a+b;
-}
-
-int main()
-{
-    add(1,2);
+int main(){
+    int i,j;
+    z =1;
 }

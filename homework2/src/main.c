@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "./tree/node.h"
+#include "symbol.h"
 extern FILE* yyin;
 extern node_ptr root;
 extern int yylineno;
@@ -21,6 +22,9 @@ int main(int argc,char** argv){
     yyparse();
     if(!LexError && !SynError){
         printTree(root,0);
+        table = initTable();
+        traverseTree(root);
+        deleteTable(table);
     }
     // free mem
     delete_node(root);
