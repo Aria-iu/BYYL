@@ -112,6 +112,7 @@ INCEXPR: JINGHAO INCLUDE INCFILE    {$$=new_node(@$.first_line,NOTTOKEN,"INCEXPR
 ExtDef: Specifier ExtDecList SEMI   {$$=new_node(@$.first_line,NOTTOKEN,"ExtDef",3,$1,$2,$3);}
     | Specifier SEMI                {$$=new_node(@$.first_line,NOTTOKEN,"ExtDef",2,$1,$2);}
     | Specifier FunDec CompSt       {$$=new_node(@$.first_line,NOTTOKEN,"ExtDef",3,$1,$2,$3);}
+    | Specifier FunDec SEMI         {SynError=1;fprintf(stderr,"Error type B at line %d: Incomplete definition \"%s\"\n", yylineno,$2->child->val);}
     ;
 ExtDecList: VarDec                  {$$=new_node(@$.first_line,NOTTOKEN,"ExtDecList",1,$1);}
     | VarDec COMMA ExtDecList       {$$=new_node(@$.first_line,NOTTOKEN,"ExtDecList",3,$1,$2,$3);}

@@ -2,6 +2,9 @@
 #define __SYMBOL__
 #define HASH_TABLE_SIZE 0x3fff
 #define STACK_DEPTH    0x3fff
+#define TRUE 1
+#define FALSE 0
+
 #include "../tree/node.h"
 #include <stddef.h>
 #include <stdlib.h>

@@ -1,8 +1,5 @@
 #include "symbol.h"
 
-#define TRUE 1
-#define FALSE 0
-
 bool isStructDef(pItem src) {
     if (src == NULL) return FALSE;
     if (src->field->type->cla != STRUCT) return FALSE;
@@ -106,8 +103,7 @@ pType copyType(pType src) {
 
 void deleteType(pType type) {
     assert(type != NULL);
-    assert(type->cla == BASIC || type->cla == ARRAY ||
-           type->cla == STRUCT || type->cla == FUNC);
+    assert(type->cla == BASIC || type->cla == ARRAY ||type->cla == STRUCT || type->cla == FUNC);
     pFieldList temp = NULL;
     // pFieldList tDelete = NULL;
     switch (type->cla) {
@@ -956,6 +952,9 @@ pType Exp(node_ptr node){
                     if (p1) deleteType(p1);
                 }else{
                     node_ptr ref_id = t->next->next;
+                    // char *name = ref_id->name;
+                    char msg[100] = {0};
+                    sprintf(msg, "Non-existent filed \"%s\"", ref_id->val);
                     pFieldList structfield = p1->u.structure.field;
                     while (structfield != NULL) {
                         if (!strcmp(structfield->name, ref_id->val)) {
@@ -966,7 +965,7 @@ pType Exp(node_ptr node){
                     if (structfield == NULL) {
                         //报错，没有可以匹配的域名
                         printf("Error type %d at Line %d: %s.\n", 14, t->linenum,
-                               "NONEXISTFIELD");
+                               msg);
                     } else {
                         returnType = copyType(structfield->type);
                     }
