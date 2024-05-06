@@ -1,0 +1,5 @@
+int Wrong()
+{
+	int Correct;
+	return Correct;
+}

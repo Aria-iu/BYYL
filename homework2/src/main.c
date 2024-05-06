@@ -21,7 +21,7 @@ int main(int argc,char** argv){
     yyrestart(yyin);
     yyparse();
     if(!LexError && !SynError){
-        printTree(root,0);
+        // printTree(root,0);
         table = initTable();
         traverseTree(root);
         deleteTable(table);

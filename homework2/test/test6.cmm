@@ -1,5 +1,15 @@
+struct Pos
+{
+    float x,y;
+};
+
 int main()
 {
+    struct Pos p;
     int i;
-    10 = i;
+    int a[2][5];
+    int y = a[2][1.2];
+    p+a;
+    2 = i;
+    i[2][3];
 }

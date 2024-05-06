@@ -949,7 +949,7 @@ pType Exp(node_ptr node){
                 if (!p1||p1->cla!=STRUCT||!p1->u.structure.structName){
                     //报错，对非结构体使用.运算符
                     pError(ILLEGAL_USE_DOT, t->linenum, "Illegal use of \".\".");
-                    if (p1) deleteType(p1);
+                    // if (p1) deleteType(p1);
                 }else{
                     node_ptr ref_id = t->next->next;
                     // char *name = ref_id->name;

@@ -1,0 +1,9 @@
+struct i
+{
+    float x,y;
+};
+int main()
+{
+    int i;
+    i = 3.7;
+}
