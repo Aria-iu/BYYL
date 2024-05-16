@@ -22,7 +22,7 @@ rerun:
 	$(cc) ./src/main.c ./src/tree/node.c ./src/ir/inter.c ./syntax.tab.c ./src/symbol/symbol.c -lfl -Isrc/ -Isrc/symbol/ -Isrc/tree/ -o parser -g
 
 my_test:
-	./parser ./test/test$(num).cmm ./out/out$(num)
+	./parser ./test/test$(num).cmm ./out/out$(num).ir
 
 clean:
 	rm ./syntax.tab.*

@@ -20,7 +20,8 @@ typedef struct _Operand{
         OP_ADDRESS,
         OP_LABEL,
         OP_FUNCTION,
-        OP_RELOP,
+            OP_RELOP,
+        OP_TEMP,
     }kind;
     union {
         int value;
@@ -49,6 +50,7 @@ typedef struct _interCode {
         IR_PARAM,
         IR_READ,
         IR_WRITE,
+        IR_READ_TEMP,
     } kind;
 
     union {
